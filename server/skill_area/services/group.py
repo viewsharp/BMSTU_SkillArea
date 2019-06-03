@@ -1,58 +1,44 @@
-from skill_area.base import Service, utils
-from skill_area.models import User
+from skill_area.base import Service
+from skill_area.models import StudentGroup, User, Discipline
 
 
 class GroupService(Service):
-    def create(self, _, username, email, password, first_name, last_name):
-        user = User(
-            username=username,
-            email=email,
-            password=utils.encode_password(password),
-            first_name=first_name,
-            last_name=last_name
+    def create(self, _, name):
+        group = StudentGroup(
+            name=name
         )
-        user.save()
+        group.save()
 
         return {
-            'username': user.username,
-            'email': user.email
+            'id': group.id,
+            'name': group.name
         }
 
     def get(self, session, id=None):
         if id:
-            user = User.objects.get(id=id)
+            group = StudentGroup.objects.get(id=id)
         else:
-            user = session.user
+            group = session.user.student_group
+
+        if not group:
+            return None
 
         return {
-            'id': user.id,
-            'username': user.username,
-            'email': user.email,
-            'category': user.category,
-            'first_name': user.first_name,
-            'last_name': user.last_name
+            'id': group.id,
+            'name': group.name,
+            'students_count': len(User.objects.filter(student_group=group)),
+            'disciplines_count': len(Discipline.objects.filter(student_group=group))
         }
 
-    def update(self, session, id=None, email=None, password=None, category=None, first_name=None, last_name=None):
-        if id:
-            user = User.objects.get(id=id)
-        else:
-            user = session.user
-            
-        user.email = email or user.email
-        user.password = utils.encode_password(password) if password else user.password
-        user.category = category or user.category
-        user.first_name = first_name or user.first_name
-        user.last_name = last_name or user.last_name
-
-        user.save()
-
     def get_list(self, _):
-        users = User.objects.all()
+        groups = StudentGroup.objects.all()
         return [{
-            'id': user.id,
-            'category': user.category,
-            'username': user.username,
-            'first_name': user.first_name,
-            'last_name': user.last_name
-        } for user in users]
+            'id': group.id,
+            'name': group.name,
+            'students_count': len(User.objects.filter(student_group=group)),
+            'disciplines_count': len(Discipline.objects.filter(student_group=group))
+        } for group in groups]
+
+    def remove(self, id):
+        group = StudentGroup.objects.get(id=id)
+        group.delete()

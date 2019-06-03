@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Bar, Doughnut, Line, Pie, Polar, Radar } from 'react-chartjs-2';
 import { Card, CardBody, CardColumns, CardHeader } from 'reactstrap';
 
-class Home extends Component {
+class Messages extends Component {
   render() {
     return (
       <div className="animated fadeIn">
@@ -12,4 +12,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default Messages;

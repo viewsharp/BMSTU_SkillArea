@@ -36,49 +36,41 @@ const Widgets = React.lazy(() => import('./views/Widgets/Widgets'));
 const Users = React.lazy(() => import('./views/Users/Users'));
 const User = React.lazy(() => import('./views/Users/User'));
 
+const News = React.lazy(() => import('./views/News/News'));
+const Profile = React.lazy(() => import('./views/Profile/Profile'));
+const Activities = React.lazy(() => import('./views/Activities/Activities'));
+const Marks = React.lazy(() => import('./views/Marks/Marks'));
+const MarksAdmin = React.lazy(() => import('./views/Marks/MarksAdmin'));
+
+
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
-const routes = [
+
+export const user_routes = [
   { path: '/', exact: true, name: 'Home' },
-  { path: '/dashboard', name: 'Dashboard', component: Dashboard },
-  { path: '/theme', exact: true, name: 'Theme', component: Colors },
-  { path: '/theme/colors', name: 'Colors', component: Colors },
-  { path: '/theme/typography', name: 'Typography', component: Typography },
-  { path: '/base', exact: true, name: 'Base', component: Cards },
-  { path: '/base/cards', name: 'Cards', component: Cards },
-  { path: '/base/forms', name: 'Forms', component: Forms },
-  { path: '/base/switches', name: 'Switches', component: Switches },
-  { path: '/base/tables', name: 'Tables', component: Tables },
-  { path: '/base/tabs', name: 'Tabs', component: Tabs },
-  { path: '/base/breadcrumbs', name: 'Breadcrumbs', component: Breadcrumbs },
-  { path: '/base/carousels', name: 'Carousel', component: Carousels },
-  { path: '/base/collapses', name: 'Collapse', component: Collapses },
-  { path: '/base/dropdowns', name: 'Dropdowns', component: Dropdowns },
-  { path: '/base/jumbotrons', name: 'Jumbotrons', component: Jumbotrons },
-  { path: '/base/list-groups', name: 'List Groups', component: ListGroups },
-  { path: '/base/navbars', name: 'Navbars', component: Navbars },
-  { path: '/base/navs', name: 'Navs', component: Navs },
-  { path: '/base/paginations', name: 'Paginations', component: Paginations },
-  { path: '/base/popovers', name: 'Popovers', component: Popovers },
-  { path: '/base/progress-bar', name: 'Progress Bar', component: ProgressBar },
-  { path: '/base/tooltips', name: 'Tooltips', component: Tooltips },
-  { path: '/buttons', exact: true, name: 'Buttons', component: Buttons },
-  { path: '/buttons/buttons', name: 'Buttons', component: Buttons },
-  { path: '/buttons/button-dropdowns', name: 'Button Dropdowns', component: ButtonDropdowns },
-  { path: '/buttons/button-groups', name: 'Button Groups', component: ButtonGroups },
-  { path: '/buttons/brand-buttons', name: 'Brand Buttons', component: BrandButtons },
-  { path: '/icons', exact: true, name: 'Icons', component: CoreUIIcons },
-  { path: '/icons/coreui-icons', name: 'CoreUI Icons', component: CoreUIIcons },
-  { path: '/icons/flags', name: 'Flags', component: Flags },
-  { path: '/icons/font-awesome', name: 'Font Awesome', component: FontAwesome },
-  { path: '/icons/simple-line-icons', name: 'Simple Line Icons', component: SimpleLineIcons },
-  { path: '/notifications', exact: true, name: 'Notifications', component: Alerts },
-  { path: '/notifications/alerts', name: 'Alerts', component: Alerts },
-  { path: '/notifications/badges', name: 'Badges', component: Badges },
-  { path: '/notifications/modals', name: 'Modals', component: Modals },
-  { path: '/widgets', name: 'Widgets', component: Widgets },
-  { path: '/charts', name: 'Charts', component: Charts },
+  { path: '/home', name: 'Home', component: News },
   { path: '/users', exact: true,  name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
+  { path: '/disciplines/:id', exact: true, name: 'Discipline Activities', component: Activities},
+  { path: '/profile', name: 'Profile', component: Profile },
+  { path: '/marks', name: 'Marks', component: Marks },
 ];
 
-export default routes;
+const NewsAdmin = React.lazy(() => import('./views/News/NewsAdmin'));
+const UserAdmin = React.lazy(() => import('./views/Users/UserAdmin'));
+const ActivitiesAdmin = React.lazy(() => import('./views/Activities/ActivitiesAdmin'));
+const ActivityAdmin = React.lazy(() => import('./views/Activities/ActivityAdmin'));
+const Group = React.lazy(() => import('./views/Groups/Group'));
+const Groups = React.lazy(() => import('./views/Groups/Groups'));
+
+export const admin_routes = [
+  { path: '/', exact: true, name: 'Home' },
+  { path: '/home', name: 'Home', component: NewsAdmin },
+  { path: '/users', exact: true,  name: 'Users', component: Users },
+  { path: '/users/:id', exact: true, name: 'User Details', component: User },
+  { path: '/groups', exact: true,  name: 'Groups', component: Groups },
+  { path: '/groups/:id', exact: true, name: 'Group Details', component: Group },
+  { path: '/groups/:group_id/disciplines/:id/', exact: true, name: 'Discipline Details', component: ActivitiesAdmin },
+  { path: '/groups/:group_id/disciplines/:id/:activity_id', exact: true, name: 'Discipline Activity Details', component: ActivityAdmin },
+  { path: '/profile', name: 'Profile', component: Profile },
+  { path: '/marks', name: 'Marks', component: MarksAdmin },
+];

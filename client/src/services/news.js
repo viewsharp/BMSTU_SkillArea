@@ -1,29 +1,31 @@
 import Service from '../base/Service.js'
 
-class UserService extends Service {
-  prefix = 'users';
+class NewsService extends Service {
+  prefix = 'news';
 
-  create = ({username, email, password}) => this._call('create', {username, email, password});
+  create = ({title, text}) => this._call('create', {title, text});
+  remove = (id) => this._call('remove', {id});
+  // get = (id) => this._call('get', {id});
+  getList = () => this._call('get_list', {});
 }
 
-class UserStorage {
+class NewsStorage {
   constructor() {
     this.data = [{
-      username: 'test',
-      email: 'test',
-      password: 'test',
+      title: 'Test News',
+      text: 'text of test news'
     }];
   }
 
 
-  async create({username, email, password}) {
-    this.data.push({username, email, password});
+  async create({title, text}) {
+    this.data.unshift({title, text});
     return this.data.length;
   }
 
-  async get(id) {
-    return this.data[id - 1];
+  async getList() {
+    return this.data;
   }
 }
 
-export default new UserStorage();
+export default new NewsService();

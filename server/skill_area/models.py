@@ -3,33 +3,27 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-class Course(models.Model):
-    pass
+class News(models.Model):
+    title = models.TextField()
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+
+
+class StudentGroup(models.Model):
+    name = models.TextField(unique=True)
 
 
 class Discipline(models.Model):
     name = models.TextField()
-
-
-class Period(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    disciplines = models.ManyToManyField(Discipline)
+    student_group = models.ForeignKey(StudentGroup, on_delete=models.CASCADE, null=True)
 
 
 class Activity(models.Model):
-    pass
-
-
-class Lesson(Activity):
-    pass
-
-
-class Task(Activity):
-    pass
-
-
-class StudentGroup(models.Model):
-    name = models.TextField()
+    title = models.TextField()
+    text = models.TextField()
+    discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE, null=True)
+    date = models.TextField(null=True)
+    place = models.TextField(null=True)
 
 
 class User(AbstractUser):
@@ -48,3 +42,7 @@ class Session(models.Model):
 class Mark(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+    value = models.IntegerField(null=True)
+
+    class Meta:
+        unique_together = (("student", "activity"),)

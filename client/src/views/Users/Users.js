@@ -1,68 +1,75 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Badge, Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
-
-import usersData from './UsersData'
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
+import {Card, CardBody, CardHeader, Col, Row, Table} from 'reactstrap';
+import userService from '../../services/user.js'
+import groupService from '../../services/group.js'
 
 function UserRow(props) {
-  const user = props.user
-  const userLink = `/users/${user.id}`
 
-  const getBadge = (status) => {
-    return status === 'Active' ? 'success' :
-      status === 'Inactive' ? 'secondary' :
-        status === 'Pending' ? 'warning' :
-          status === 'Banned' ? 'danger' :
-            'primary'
-  }
+  const user = props.user;
+  const group = props.group;
+  const userLink = `/users/${user.id}`;
+  const name = `${user.first_name} ${user.last_name}`;
 
   return (
-    <tr key={user.id.toString()}>
-      <th scope="row"><Link to={userLink}>{user.id}</Link></th>
-      <td><Link to={userLink}>{user.name}</Link></td>
-      <td>{user.registered}</td>
-      <td>{user.role}</td>
-      <td><Link to={userLink}><Badge color={getBadge(user.status)}>{user.status}</Badge></Link></td>
-    </tr>
+      <tr key={user.id.toString()}>
+        <th scope="row"><Link to={userLink}>{user.id}</Link></th>
+        <td><Link to={userLink}>{user.username}@mail.ru</Link></td>
+        <td>{group ? group.name: ''}</td>
+        <td><Link to={userLink}>{name}</Link></td>
+        <td>{user.category}</td>
+      </tr>
   )
 }
 
 class Users extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [],
+      groups: []
+    }
+  }
+
+  async componentWillMount() {
+    this.setState({
+      users: await userService.getList(),
+      group: await groupService.getList()
+    })
+  }
 
   render() {
-
-    const userList = usersData.filter((user) => user.id < 10)
-
     return (
-      <div className="animated fadeIn">
-        <Row>
-          <Col xl={6}>
-            <Card>
-              <CardHeader>
-                <i className="fa fa-align-justify"></i> Users <small className="text-muted">example</small>
-              </CardHeader>
-              <CardBody>
-                <Table responsive hover>
-                  <thead>
+        <div className="animated fadeIn">
+          <Row>
+            <Col>
+              <Card>
+                <CardHeader>
+                  <i className="fa fa-align-justify"></i> Пользователи
+                </CardHeader>
+                <CardBody>
+                  <Table responsive hover>
+                    <thead>
                     <tr>
                       <th scope="col">id</th>
-                      <th scope="col">name</th>
-                      <th scope="col">registered</th>
-                      <th scope="col">role</th>
-                      <th scope="col">status</th>
+                      <th scope="col">E-mail</th>
+                      <th scope="col">Группа</th>
+                      <th scope="col">Имя</th>
+                      <th scope="col">Роль</th>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {userList.map((user, index) =>
-                      <UserRow key={index} user={user}/>
+                    </thead>
+                    <tbody>
+                    {this.state.users.map((user, i) =>
+                        <UserRow key={i} user={user}
+                                 group={this.state.group.filter(group => group.id === user.group_id)[0]}/>
                     )}
-                  </tbody>
-                </Table>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      </div>
+                    </tbody>
+                  </Table>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        </div>
     )
   }
 }
